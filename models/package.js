@@ -4,6 +4,8 @@ const mongoose = require("mongoose");
 
 const PackageSchema = new mongoose.Schema(
   {
+    _id: mongoose.Schema.Types.ObjectId,
+    user: { type: mongoose.Schema.Types.ObjectId, refs: "User" },
     store: {
       type: String,
       required: true,

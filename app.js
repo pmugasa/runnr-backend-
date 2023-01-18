@@ -3,9 +3,9 @@ const express = require("express");
 const mongoose = require("mongoose");
 const path = require("path");
 const passport = require("passport");
+const LocalStrategy = require("passport-local").Strategy;
 const session = require("express-session");
 const bcryptjs = require("bcryptjs");
-const LocalStrategy = require("passport-local").Strategy;
 const packageRoutes = require("./routes/packagesRoutes");
 const userRoutes = require("./routes/userRoutes");
 
@@ -17,7 +17,6 @@ const app = express();
 //connecting to DB
 mongoose
   .connect(process.env.MONGO_URL, {
-    useUnifiedTopology: true,
     useNewUrlParser: true,
   })
   .then(() => {
@@ -59,13 +58,14 @@ passport.deserializeUser((id, done) => {
   });
 });
 
+//access to user object from anywhere in the app
 app.use(function (req, res, next) {
   res.locals.currentUser = req.user;
   next();
 });
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(expresss.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: false }));
 app.use("/user", userRoutes);
 app.use("/packages", packageRoutes);
 
@@ -73,9 +73,6 @@ app.use("/packages", packageRoutes);
 app.get("/", (req, res) => {
   res.send("hello");
 });
-
-//TO BE USED FOR LOGGED IN USER TO SHOW NAME IN DASHBOARD
-app.get("/dashboard", userControllers.user_object);
 
 const PORT = 4000;
 

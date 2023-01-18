@@ -2,11 +2,19 @@ const express = require("express");
 const router = express.Router();
 const userControllers = require("../controllers/userControllers");
 
+//get all the users
+router.get("/", userControllers.user_accounts);
+
 //user log-in
-app.post("/log-in", userControllers.user_login);
+router.post("/log-in", userControllers.user_login);
 
 //user log-out
-app.get("/log-out", userControllers.user_logout);
+router.get("/log-out", userControllers.user_logout);
 
 //user sign-up
-app.post("/sign-up", userControllers.user_signup);
+router.post("/sign-up", userControllers.user_signup);
+
+//TO BE USED FOR LOGGED IN USER TO SHOW NAME IN DASHBOARD
+router.get("/dashboard", userControllers.user_object);
+
+module.exports = router;
